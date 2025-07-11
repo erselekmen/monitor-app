@@ -18,5 +18,11 @@ ERROR_COUNT = Counter(
 
 @app.get("/")
 async def root():
-    REQUEST_COUNT.inc()
+    REQUEST_COUNT.labels('GET', '/', '200').inc()
     return {"message": "Hi, this is the Monitor App v1.0"}
+
+@app.route('/error')
+def simulate_error():
+    REQUEST_COUNT.labels('GET', '/simulate_error', '500').inc()
+    ERROR_COUNT.labels('GET', '/simulate_error', '500').inc()
+    return Response(status_code=500)
