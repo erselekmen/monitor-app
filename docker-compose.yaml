@@ -16,6 +16,8 @@ services:
       - "9090:9090"
     networks:
       - monitoring
+    rule_files:
+      - "rules.yml"
 
   grafana:
     image: grafana/grafana
