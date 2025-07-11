@@ -4,6 +4,10 @@ from fastapi.responses import Response
 
 app = FastAPI()
 
+# sample prometheus metrics:
+REQUEST_COUNT = Counter("request_count", "Total number of requests")
+ERROR_COUNT = Counter("error_count", "Number of error responses")
+
 @app.get("/")
 async def root():
     return {"message": "Hi, this is the Monitor App v1.0"}
