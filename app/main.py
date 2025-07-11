@@ -5,8 +5,16 @@ from fastapi.responses import Response
 app = FastAPI()
 
 # sample prometheus metrics:
-REQUEST_COUNT = Counter("request_count", "Total number of requests")
-ERROR_COUNT = Counter("error_count", "Number of error responses")
+REQUEST_COUNT = Counter(
+    'http_requests_total',
+    'Total HTTP Requests',
+    ['method', 'endpoint', 'status']
+)
+ERROR_COUNT = Counter(
+    'http_errors_total',
+    'Total HTTP Errors',
+    ['method', 'endpoint', 'status']
+)
 
 @app.get("/")
 async def root():
