@@ -10,4 +10,5 @@ ERROR_COUNT = Counter("error_count", "Number of error responses")
 
 @app.get("/")
 async def root():
+    REQUEST_COUNT.inc()
     return {"message": "Hi, this is the Monitor App v1.0"}
