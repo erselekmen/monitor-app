@@ -26,3 +26,7 @@ def simulate_error():
     REQUEST_COUNT.labels('GET', '/simulate_error', '500').inc()
     ERROR_COUNT.labels('GET', '/simulate_error', '500').inc()
     return Response(status_code=500)
+
+@app.get("/metrics")
+async def metrics():
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
