@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   web:
-    build: .
+    build: ./app
     ports:
       - "5000:5000"
     networks:
@@ -11,15 +11,19 @@ services:
   prometheus:
     image: prom/prometheus
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus:/etc/prometheus
     ports:
       - "9090:9090"
     networks:
       - monitoring
 
-
   grafana:
     image: grafana/grafana
+    volumes:
+      - ./grafana/provisioning:/etc/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=11212221
     ports:
       - "3000:3000"
     networks:
