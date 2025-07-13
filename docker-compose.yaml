@@ -21,6 +21,7 @@ services:
     image: grafana/grafana
     volumes:
       - ./grafana:/etc/grafana
+      - ./grafana/config/grafana.ini:/etc/grafana/grafana.ini
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=11212221
