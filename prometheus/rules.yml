@@ -2,7 +2,7 @@ groups:
   - name: error-rules
     rules:
     - alert: HighErrorRate
-      expr: (sum(rate(error_counts[5m])) / (sum(rate(request_counts[5m]))) > 0.1
+      expr: (sum(rate(error_counts[5m])) / sum(rate(request_counts[5m]))) > 0.1
       for: 1m
       labels:
         severity: critical
