@@ -15,7 +15,7 @@ locals {
 }
 
 terraform {
-  source = "${local.modules_dir}/modules/terraform-aws-vpc"
+  source = "${local.modules_dir}/infrastructure/modules/terraform-aws-vpc"
 }
 
 inputs = {
