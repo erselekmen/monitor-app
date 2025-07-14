@@ -10,8 +10,8 @@ locals {
   name                = "vpc"
   azs                 = ["eu-central-1a"]
   cidr                = "10.102.0.0/16"
-  public_subnets      = ["10.102.1.0/24"]
-  private_subnets     = ["10.102.11.0/24"]
+  public_subnets      = ["10.102.12.0/24"]
+  private_subnets     = ["10.102.23.0/24"]
 }
 
 terraform {

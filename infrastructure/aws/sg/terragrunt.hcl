@@ -13,23 +13,41 @@ terraform {
   source = "${local.modules_dir}/modules/terraform-aws-security-group"
 }
 
+dependency "vpc" {
+  config_path = "${local.root_dir}/vpc"
+}
+
 inputs = {
-  name        = "${local.common_vars.namespace}-${local.common_vars.environment}-sg"
-  description = "Security group for EC2 with ingress from static IP and egress to internet"
+  name        = "${local.common_vars.namespace}-${local.common_vars.environment}-ecs-sg"
+  description = "Security group for ECS tasks and ALB access"
   vpc_id      = dependency.vpc.outputs.vpc_id
 
   ingress_with_cidr_blocks = [
     {
-      description = "Allow SSH from static IP"
-      from_port   = 22
-      to_port     = 22
+      description = "Allow HTTP access from ALB"
+      from_port   = 80
+      to_port     = 80
       protocol    = "tcp"
       cidr_blocks = local.source_ip
     },
     {
-      description = "Allow HTTP Requests from the static IP"
-      from_port   = 80
-      to_port     = 80
+      description = "Allow HTTPS access"
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
+      cidr_blocks = local.source_ip
+    },
+    {
+      description = "Allow Prometheus UI"
+      from_port   = 9090
+      to_port     = 9090
+      protocol    = "tcp"
+      cidr_blocks = local.source_ip
+    },
+    {
+      description = "Allow Grafana UI"
+      from_port   = 3000
+      to_port     = 3000
       protocol    = "tcp"
       cidr_blocks = local.source_ip
     }
@@ -39,13 +57,9 @@ inputs = {
     {
       rule        = "all-all"
       cidr_blocks = "0.0.0.0/0"
-      description = "Allow all outbound connections"
+      description = "Allow all outbound traffic from ECS tasks"
     }
   ]
 
   tags = local.common_vars.tags
-}
-
-dependency "vpc" {
-  config_path = "${local.root_dir}/vpc"
 }
