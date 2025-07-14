@@ -30,9 +30,9 @@ inputs = {
   task_role_name          = "${local.common_vars.namespace}-${local.common_vars.environment}-${local.task_role_name}"
   iam_execution_role_name = "${local.common_vars.namespace}-${local.common_vars.environment}-${local.role_name}"
 
-  cluster_id              = dependency.ecs_cluster.outputs.ecs_cluster_id
-  cluster_name            = dependency.ecs_cluster.outputs.ecs_cluster_name
-  service_subnets         = dependency.vpc.outputs.private_subnets
+  cluster_id              = dependency.ecs_cluster.outputs.id
+  cluster_name            = dependency.ecs_cluster.outputs.name
+  service_subnets         = dependency.vpc.outputs.public_subnet_ids
   service_security_groups = [dependency.sg_web.outputs.this_security_group_id]
 
   enable_execute_command = false
@@ -40,7 +40,7 @@ inputs = {
   target_group_name         = "${local.common_vars.namespace}-${local.common_vars.environment}-${local.name}"
   vpc_id                    = dependency.vpc.outputs.vpc_id
   internal_listener_enabled = false
-  aws_lb_listener_arn       = dependency.alb_external.outputs.https_listener_arns[0]
+  aws_lb_listener_arn       = dependency.alb_external.outputs.http_tcp_listener_arns[0]
   health_check_path         = "/"
   health_check_protocol     = "HTTP"
   tg_protocol               = "HTTP"
@@ -77,7 +77,7 @@ dependency "ecr_monitor" {
   config_path = "${local.root_dir}/ecr"
 }
 
-dependency "sg_grafana" {
+dependency "sg_web" {
   config_path = "${local.root_dir}/sg/ecs"
 }
 

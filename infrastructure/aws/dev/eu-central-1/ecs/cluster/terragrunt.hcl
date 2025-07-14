@@ -16,7 +16,7 @@ terraform {
 }
 
 inputs = {
-  name               = "${local.common_vars.namespace}-${local.common_vars.environment}-${local.name}"
+  cluster_name               = "${local.common_vars.namespace}-${local.common_vars.environment}-${local.name}"
   container_insights = local.container_insights
 
   capacity_providers = local.capacity_providers
