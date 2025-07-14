@@ -3,53 +3,42 @@ include {
 }
 
 locals {
-  root_dir     = dirname(find_in_parent_folders("root.hcl"))
-  modules_dir  = get_repo_root()
-  common_vars  = yamldecode(file(find_in_parent_folders("common_vars.yaml")))
-  source_ip    = "3.70.64.111/32"
+  root_dir    = dirname(find_in_parent_folders("root.hcl"))
+  modules_dir = get_repo_root()
+  common_vars = yamldecode(file(find_in_parent_folders("common_vars.yaml")))
+  name        = "ecs-sg"
 }
 
 terraform {
   source = "${local.modules_dir}/modules/terraform-aws-security-group"
 }
 
-dependency "vpc" {
-  config_path = "${local.root_dir}/vpc"
-}
-
 inputs = {
-  name        = "${local.common_vars.namespace}-${local.common_vars.environment}-ecs-sg"
-  description = "Security group for ECS tasks and ALB access"
+  name        = "${local.common_vars.namespace}-${local.common_vars.environment}-${local.name}"
+  description = "Security group for Monitor App ECS Service"
   vpc_id      = dependency.vpc.outputs.vpc_id
 
-  ingress_with_cidr_blocks = [
+  ingress_with_source_security_group_id = [
     {
-      description = "Allow HTTP access from ALB"
-      from_port   = 80
-      to_port     = 80
-      protocol    = "tcp"
-      cidr_blocks = local.source_ip
+      from_port                = 9090
+      to_port                  = 9090
+      protocol                 = "tcp"
+      description              = "HTTP access from External ALB"
+      source_security_group_id = dependency.sg_alb_external.outputs.this_security_group_id
     },
     {
-      description = "Allow HTTPS access"
-      from_port   = 443
-      to_port     = 443
-      protocol    = "tcp"
-      cidr_blocks = local.source_ip
+      from_port                = 3000
+      to_port                  = 3000
+      protocol                 = "tcp"
+      description              = "HTTP access from External ALB"
+      source_security_group_id = dependency.sg_alb_external.outputs.this_security_group_id
     },
     {
-      description = "Allow Prometheus UI"
-      from_port   = 9090
-      to_port     = 9090
-      protocol    = "tcp"
-      cidr_blocks = local.source_ip
-    },
-    {
-      description = "Allow Grafana UI"
-      from_port   = 3000
-      to_port     = 3000
-      protocol    = "tcp"
-      cidr_blocks = local.source_ip
+      from_port                = 5000
+      to_port                  = 5000
+      protocol                 = "tcp"
+      description              = "HTTP access from External ALB"
+      source_security_group_id = dependency.sg_alb_external.outputs.this_security_group_id
     }
   ]
 
@@ -57,9 +46,17 @@ inputs = {
     {
       rule        = "all-all"
       cidr_blocks = "0.0.0.0/0"
-      description = "Allow all outbound traffic from ECS tasks"
+      description = "Allow all outbound connections"
     }
   ]
 
   tags = local.common_vars.tags
+}
+
+dependency "vpc" {
+  config_path = "${local.root_dir}/vpc"
+}
+
+dependency "sg_alb_external" {
+  config_path = "${local.root_dir}/sg/alb/external"
 }
