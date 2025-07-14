@@ -6,7 +6,7 @@ locals {
   root_dir        = dirname(find_in_parent_folders("root.hcl"))
   modules_dir     = get_repo_root()
   common_vars     = yamldecode(file(find_in_parent_folders("common_vars.yaml")))
-  name            = "monitor-web"
+  name            = "app"
   role_name       = "monitor-web-role"
   task_role_name  = "monitor-web-task-role"
   cpu             = 512
@@ -24,7 +24,7 @@ inputs = {
   task_name           = local.name
   task_cpu            = local.cpu
   task_memory         = local.memory
-  path_routing        = ["/grafana"]
+  path_routing        = ["/"]
   desired_count       = 1
 
   task_role_name          = "${local.common_vars.namespace}-${local.common_vars.environment}-${local.task_role_name}"
@@ -82,5 +82,5 @@ dependency "sg_web" {
 }
 
 dependency "alb_external" {
-  config_path = "${local.root_dir}/alb/external"
+  config_path = "${local.root_dir}/terraform-aws-alb"
 }
