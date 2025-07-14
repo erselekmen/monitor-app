@@ -8,10 +8,10 @@ locals {
   common_vars         = yamldecode(file(find_in_parent_folders("common_vars.yaml")))
 
   name                = "vpc"
-  azs                 = ["eu-central-1a"]
+  azs                 = ["eu-central-1a", "eu-central-1b"]
   cidr                = "10.102.0.0/16"
-  public_subnets      = ["10.102.12.0/24"]
-  private_subnets     = ["10.102.23.0/24"]
+  public_subnets      = ["10.102.12.0/24", "10.102.13.0/24"]
+  private_subnets     = ["10.102.23.0/24", "10.102.24.0/24"]
 }
 
 terraform {

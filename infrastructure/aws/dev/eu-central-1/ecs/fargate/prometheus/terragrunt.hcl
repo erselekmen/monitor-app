@@ -6,16 +6,16 @@ locals {
   root_dir       = dirname(find_in_parent_folders("root.hcl"))
   modules_dir    = get_repo_root()
   common_vars    = yamldecode(file(find_in_parent_folders("common_vars.yaml")))
-  name           = "grafana"
-  role_name      = "grafana-role"
-  task_role_name = "grafana-task-role"
+  name           = "prometheus"
+  role_name      = "prometheus-role"
+  task_role_name = "prometheus-task-role"
   cpu            = 512
   memory         = 1024
-  port           = 3000
+  port           = 9090
 }
 
 terraform {
-  source = "${local.modules_dir}/infrastructure/modules/terraform-aws-ecs-service//fargate-alb-taskonly"
+  source = "${local.modules_dir}/infrastructure/modules/terraform-aws-ecs-service/fargate-alb-taskonly"
 }
 
 inputs = {
@@ -32,15 +32,15 @@ inputs = {
   cluster_id              = dependency.ecs_cluster.outputs.ecs_cluster_id
   cluster_name            = dependency.ecs_cluster.outputs.ecs_cluster_name
   service_subnets         = dependency.vpc.outputs.private_subnets
-  service_security_groups = [dependency.sg_grafana.outputs.this_security_group_id]
+  service_security_groups = [dependency.sg_prometheus.outputs.this_security_group_id]
 
   enable_execute_command = false
 
   vpc_id                    = dependency.vpc.outputs.vpc_id
   internal_listener_enabled = false
   aws_lb_listener_arn       = dependency.alb_external.outputs.http_listener_arns[0]
-  path_routing              = ["/grafana"]
-  health_check_path         = "/login"
+  path_routing              = ["/prometheus"]
+  health_check_path         = "/"
   health_check_protocol     = "HTTP"
   tg_protocol               = "HTTP"
   health_check_matcher      = 200
@@ -50,7 +50,7 @@ inputs = {
 
   app_container_port   = local.port
   app_container_name   = "${local.name}"
-  app_container_image  = "${dependency.ecr_monitor.outputs.repository_url}:grafana-latest"
+  app_container_image  = "${dependency.ecr_monitor.outputs.repository_url}:prometheus-latest"
   app_container_cpu    = local.cpu
   app_container_memory = local.memory
   app_port_mappings = [
