@@ -10,7 +10,7 @@ locals {
 }
 
 terraform {
-  source = "${local.modules_dir}/modules/terraform-aws-security-group"
+  source = "${local.modules_dir}/infrastructure/modules/terraform-aws-security-group"
 }
 
 inputs = {

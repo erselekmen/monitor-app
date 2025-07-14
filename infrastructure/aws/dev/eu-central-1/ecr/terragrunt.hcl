@@ -10,7 +10,7 @@ locals {
 }
 
 terraform {
-  source = "${local.modules_dir}/modules/terraform-aws-ecr"
+  source = "${local.modules_dir}/infrastructure/modules/terraform-aws-ecr"
 }
 
 inputs = {

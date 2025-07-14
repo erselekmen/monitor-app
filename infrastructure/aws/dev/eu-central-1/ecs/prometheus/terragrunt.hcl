@@ -15,7 +15,7 @@ locals {
 }
 
 terraform {
-  source = "${local.modules_dir}/modules/terraform-aws-ecs-service//fargate-alb-taskonly"
+  source = "${local.modules_dir}/infrastructure/modules/terraform-aws-ecs-service//fargate-alb-taskonly"
 }
 
 inputs = {

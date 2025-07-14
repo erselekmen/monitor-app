@@ -12,7 +12,7 @@ locals {
 }
 
 terraform {
-  source = "${local.modules_dir}/modules/terraform-aws-alb"
+  source = "${local.modules_dir}/infrastructure/modules/terraform-aws-alb"
 }
 
 inputs = {
