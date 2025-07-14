@@ -1,0 +1,10 @@
+namespace: monitor-app
+environment: dev
+
+region: "eu-central-1"
+account_id: "643321508879"
+
+tags:
+  Namespace: monitor-app
+  Environment: dev
+  Terraform: true
