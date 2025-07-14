@@ -24,6 +24,7 @@ inputs = {
   task_name           = local.name
   task_cpu            = local.cpu
   task_memory         = local.memory
+  path_routing        = ["/grafana"]
   desired_count       = 1
 
   task_role_name          = "${local.common_vars.namespace}-${local.common_vars.environment}-${local.task_role_name}"
