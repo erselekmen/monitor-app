@@ -174,7 +174,7 @@ resource "aws_cloudwatch_log_subscription_filter" "nginx_log_subscription_filter
 }
 
 module "app_container_definition" {
-  source           = "../container-definition"
+  source           = "/Users/ersel.ekmen/Documents/GitHub/monitor-app/infrastructure/modules/terraform-aws-ecs-service/container-definition"
   container_name   = "${var.namespace}-${var.environment}-${var.app_container_name}"
   container_image  = var.app_container_image
   container_memory = var.app_container_memory
@@ -201,7 +201,7 @@ module "app_container_definition" {
 }
 
 module "nginx_container_definition" {
-  source           = "../container-definition"
+  source           = "/Users/ersel.ekmen/Documents/GitHub/monitor-app/infrastructure/modules/terraform-aws-ecs-service/container-definition"
   container_name   = "${var.namespace}-${var.environment}-${var.nginx_container_name}"
   container_image  = var.nginx_container_image
   container_memory = var.nginx_container_memory

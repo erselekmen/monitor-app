@@ -106,6 +106,7 @@ variable "task_policies" {
 
 variable "secret_arns" {
   type = list(string)
+  default = []
 }
 
 variable "target_group_name" {
@@ -122,6 +123,7 @@ variable "aws_lb_listener_arn" {
 
 variable "host_headers" {
   type = list(string)
+  default = []
 }
 
 variable "path_routing" {

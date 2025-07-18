@@ -11,7 +11,7 @@ locals {
 
 resource "aws_iam_role" "ecs_task_role" {
   name               = var.task_role_name
-  assume_role_policy = file("../files/ecs_task_execution_role.json")
+  assume_role_policy = file("/Users/ersel.ekmen/Documents/GitHub/monitor-app/infrastructure/modules/terraform-aws-ecs-service/files/ecs_task_execution_role.json")
 }
 
 resource "aws_iam_role_policy_attachment" "task_policy_attachment" {
@@ -22,7 +22,7 @@ resource "aws_iam_role_policy_attachment" "task_policy_attachment" {
 
 resource "aws_iam_role" "ecs_task_execution_role" {
   name               = var.iam_execution_role_name
-  assume_role_policy = file("../files/ecs_task_execution_role.json")
+  assume_role_policy = file("/Users/ersel.ekmen/Documents/GitHub/monitor-app/infrastructure/modules/terraform-aws-ecs-service/files/ecs_task_execution_role.json")
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_attachment" {
