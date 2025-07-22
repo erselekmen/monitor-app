@@ -11,7 +11,8 @@ services:
   prometheus:
     image: prom/prometheus
     volumes:
-      - ./prometheus:/etc/prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/rules.yml:/etc/prometheus/rules.yml
     ports:
       - "9090:9090"
     networks:
@@ -20,13 +21,21 @@ services:
   grafana:
     image: grafana/grafana
     volumes:
-      - ./grafana:/etc/grafana
       - ./grafana/config/grafana.ini:/etc/grafana/grafana.ini
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
     ports:
       - "3000:3000"
+    networks:
+      - monitoring
+  
+  error-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile.load
+    depends_on:
+      - web
     networks:
       - monitoring
 
